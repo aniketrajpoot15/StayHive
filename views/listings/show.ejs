@@ -20,7 +20,7 @@
     <br>
     
 <div class="btns">
-    <a href="/listing/<%= listing._id %>/edit" class="btn btn-dark col-1 offset-3 edit-btn">Edit</a>
+    <a href="/listings/<%= listing._id %>/edit" class="btn btn-dark col-1 offset-3 edit-btn">Edit</a>
     
     <form method="POST" action="/listings/<%= listing._id %>?_method=DELETE">
         <button class="btn btn-dark offset-5">Delete</button>
@@ -38,7 +38,7 @@
         <div class="mb-3 mt-3">
             <label for="comment" class="form-label">Comments</label>
             <textarea name="review[comment]" id="comment" cols="30" rows="5" class="form-control" required></textarea>
-            <div class="invalid-feedback">Please add some comments fro review</div>
+            <div class="invalid-feedback">Please add some comments for review</div>
         </div>
         <button class="btn btn-outline-dark">Submit</button>
     </form>
