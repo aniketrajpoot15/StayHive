@@ -9,6 +9,61 @@ body{
     flex: 1;
 }
 
+/* Filters */
+#filters {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 2rem;
+    padding: 1rem 0;
+    margin-bottom: 1.25rem;
+    border-bottom: 1px solid #ebebeb;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+#filters::-webkit-scrollbar {
+    display: none;
+}
+
+.filter {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 4.5rem;
+    cursor: pointer;
+    padding: 0.5rem 0;
+    border-bottom: 2px solid transparent;
+    opacity: 0.65;
+    transition: opacity 0.2s ease, border-color 0.2s ease;
+}
+
+.filter:hover {
+    opacity: 1;
+    border-bottom: 2px solid #222222;
+}
+
+.filter.active {
+    opacity: 1;
+    border-bottom: 2px solid #222222;
+}
+
+.filter i {
+    font-size: 1.35rem;
+    color: #222222;
+    margin-bottom: 0.4rem;
+}
+
+.filter p {
+    margin: 0;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #222222;
+    white-space: nowrap;
+    letter-spacing: 0.02em;
+}
+
 /* navbar */
 .navbar{
     height:5rem;
@@ -22,6 +77,71 @@ body{
 
 .nav-link{
     color: #222222 !important;
+}
+
+/* Search bar */
+.nav-search {
+    display: flex;
+    align-items: center;
+}
+
+.search-form {
+    display: flex;
+    align-items: center;
+    border: 1px solid #dddddd;
+    border-radius: 50px;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+    transition: box-shadow 0.2s ease;
+}
+
+.search-form:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.14);
+}
+
+.search-input {
+    border: none;
+    outline: none;
+    padding: 0.5rem 1.2rem;
+    font-size: 0.88rem;
+    font-family: inherit;
+    color: #222222;
+    width: 220px;
+    background: transparent;
+}
+
+.search-input::placeholder {
+    color: #717171;
+    font-weight: 500;
+}
+
+.search-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    border: none;
+    background: #fe424d;
+    color: white;
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    border-radius: 50px;
+    margin: 0.25rem;
+    transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.search-btn:hover {
+    background: #e03a44;
+}
+
+.search-btn:active {
+    transform: scale(0.97);
+}
+
+.search-btn i {
+    font-size: 0.8rem;
 }
 
 /* footer */
@@ -116,3 +236,12 @@ body{
     padding-left: 0;
     padding-right: 0;
 }
+
+/* MAP */
+#map { 
+    height: 350px;
+    width: 100%;
+    border-radius: 1rem;
+    border: 1px solid #dee2e6;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}

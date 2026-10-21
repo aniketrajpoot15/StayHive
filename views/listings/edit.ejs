@@ -7,7 +7,8 @@
             method="post"
             action="/listings/<%= listing._id %>?_method=PUT"
             novalidate
-            class="needs-validation">
+            class="needs-validation"
+            enctype="multipart/form-data">
             <div class="mb-3">
                 <label
                     for="title"
@@ -42,15 +43,16 @@
                 <label
                     for="image"
                     class="form-label"
-                    >Image Link</label
+                    >Upload Image</label
                 >
+                <% if(listing.image && listing.image.url) { %>
+                    <img src="<%= listing.image.url %>" alt="current image" class="img-fluid mb-2" style="max-height: 200px; border-radius: 0.5rem;" />
+                <% } %>
                 <input
                     name="listing[image]"
-                    value="<%= listing.image && listing.image.url ? listing.image.url : listing.image %>"
-                    type="text"
-                    class="form-control"
-                    required />
-                    <div class="invalid-feedback">Please Enter a valid link</div>
+                    type="file"
+                    class="form-control" />
+                    <div class="invalid-feedback">Please upload a valid image</div>
             </div>
 
             <div class="row">

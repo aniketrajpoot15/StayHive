@@ -9,12 +9,8 @@ const ListingSchema = new Schema({
     },
     description:String,
     image: {
+        url: String,
         filename: String,
-        url: {
-            type: String,
-            default: "https://images.trvl-media.com/lodging/1000000/480000/470900/470820/c63ef6c6.jpg?impolicy=resizecrop&rw=575&rh=575&ra=fill",
-            set: (v)=> v===""? "https://images.trvl-media.com/lodging/1000000/480000/470900/470820/c63ef6c6.jpg?impolicy=resizecrop&rw=575&rh=575&ra=fill" : v 
-        }
     },
     price: Number,
     location: String,
@@ -24,7 +20,20 @@ const ListingSchema = new Schema({
             type: Schema.Types.ObjectId,
             ref: "Review",
         }
-    ]
+    ],
+    owner: {
+        type: Schema.Types.ObjectId,
+        ref:"User",
+    },
+    geometry: {
+        type: {
+            type: String,
+            enum: ["Point"],
+        },
+        coordinates: {
+            type: [Number],
+        },
+    },
 });
 
 ListingSchema.post("findOneAndDelete", async (listing) => {
