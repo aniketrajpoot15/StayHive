@@ -22,20 +22,16 @@ const reviewRouter = require("./routes/review.js");
 const userRouter = require("./routes/user.js");
 
 // Use ATLASDB_URL only if it's set and not the placeholder with '<username>'
-const hasValidAtlasUrl = process.env.ATLASDB_URL && !process.env.ATLASDB_URL.includes("<username>");
+const hasValidAtlasUrl = Boolean(process.env.ATLASDB_URL && !process.env.ATLASDB_URL.includes("<username>"));
 const dbUrl = hasValidAtlasUrl ? process.env.ATLASDB_URL : "mongodb://localhost:27017/stayhive";
 
-main()
-    .then(() => {
-        console.log('connected to Db');
-    })
-    .catch((err) => {
-        console.log(err);
-    });
-
-async function main() {
-    await mongoose.connect(dbUrl);
+async function connectDb() {
+    if (mongoose.connection.readyState === 0) {
+        await mongoose.connect(dbUrl, { serverSelectionTimeoutMS: 5000 });
+        console.log("connected to Db");
+    }
 }
+connectDb().catch((err) => console.log("DB initial connection note:", err.message));
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(process.cwd(), 'views'));
@@ -44,20 +40,33 @@ app.use(methodOverride('_method'));
 app.engine('ejs', ejsMate);
 app.use(express.static(path.join(process.cwd(), 'public')));
 
-const store = MongoStore.create({
-    mongoUrl: dbUrl,
-    crypto: {
-        secret: process.env.SECRET || "mysupersecretcode",
-    },
-    touchAfter: 24 * 3600, // time period in seconds — only update session once per day
-});
-
-store.on("error", function (e) {
-    console.log("SESSION STORE ERROR", e);
+// Middleware to ensure DB connection before handling requests
+app.use(async (req, res, next) => {
+    try {
+        await connectDb();
+        next();
+    } catch (err) {
+        console.error("Database connection error:", err.message);
+        return res.status(500).send(`
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 60px auto; padding: 30px; border: 1px solid #e0e0e0; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); text-align: center;">
+                <h2 style="color: #fe424d;">⚠️ MongoDB Atlas Connection Needed</h2>
+                <p style="color: #444; font-size: 16px; line-height: 1.5;">StayHive requires a MongoDB database connection to load listings.</p>
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; text-align: left; margin: 20px 0;">
+                    <b>To resolve this in Vercel:</b>
+                    <ol style="margin-top: 10px; color: #555; padding-left: 20px;">
+                        <li>Open your <b>Vercel Project Dashboard</b></li>
+                        <li>Navigate to <b>Settings &rarr; Environment Variables</b></li>
+                        <li>Add <code>ATLASDB_URL</code> with your MongoDB Atlas connection string</li>
+                        <li>Redeploy your project</li>
+                    </ol>
+                </div>
+                <small style="color: #888;">Error details: ${err.message}</small>
+            </div>
+        `);
+    }
 });
 
 const sessionOptions = {
-    store,
     secret: process.env.SECRET || "mysupersecretcode",
     resave: false,
     saveUninitialized: true,
@@ -67,6 +76,20 @@ const sessionOptions = {
         httpOnly: true,
     }
 };
+
+if (hasValidAtlasUrl) {
+    const store = MongoStore.create({
+        mongoUrl: dbUrl,
+        crypto: {
+            secret: process.env.SECRET || "mysupersecretcode",
+        },
+        touchAfter: 24 * 3600,
+    });
+    store.on("error", function (e) {
+        console.log("SESSION STORE ERROR", e);
+    });
+    sessionOptions.store = store;
+}
 
 app.use(session(sessionOptions));
 app.use(flash());
