@@ -21,24 +21,37 @@ const listingRouter = require("./routes/listing.js");
 const reviewRouter = require("./routes/review.js");
 const userRouter = require("./routes/user.js");
 
-// Use ATLASDB_URL only if it's set and not the placeholder with '<username>'
+// Use ATLASDB_URL only if it's set and not a placeholder
 const hasValidAtlasUrl = Boolean(process.env.ATLASDB_URL && !process.env.ATLASDB_URL.includes("<username>"));
 const dbUrl = hasValidAtlasUrl ? process.env.ATLASDB_URL : "mongodb://localhost:27017/stayhive";
 
+// Database connection with retry logic
+let dbConnected = false;
 async function connectDb() {
-    if (mongoose.connection.readyState === 0) {
+    if (mongoose.connection.readyState >= 1) {
+        dbConnected = true;
+        return;
+    }
+    try {
         await mongoose.connect(dbUrl, { serverSelectionTimeoutMS: 5000 });
+        dbConnected = true;
         console.log("connected to Db");
+    } catch (err) {
+        dbConnected = false;
+        console.error("DB connection failed:", err.message);
+        throw err;
     }
 }
-connectDb().catch((err) => console.log("DB initial connection note:", err.message));
+// Attempt initial connection (non-blocking)
+connectDb().catch(() => {});
 
+// Views and static files — use __dirname for Vercel serverless compatibility
 app.set('view engine', 'ejs');
-app.set('views', path.join(process.cwd(), 'views'));
+app.set('views', path.join(__dirname, 'views'));
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 app.engine('ejs', ejsMate);
-app.use(express.static(path.join(process.cwd(), 'public')));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Middleware to ensure DB connection before handling requests
 app.use(async (req, res, next) => {
@@ -48,24 +61,30 @@ app.use(async (req, res, next) => {
     } catch (err) {
         console.error("Database connection error:", err.message);
         return res.status(500).send(`
-            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 60px auto; padding: 30px; border: 1px solid #e0e0e0; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); text-align: center;">
-                <h2 style="color: #fe424d;">⚠️ MongoDB Atlas Connection Needed</h2>
-                <p style="color: #444; font-size: 16px; line-height: 1.5;">StayHive requires a MongoDB database connection to load listings.</p>
-                <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; text-align: left; margin: 20px 0;">
-                    <b>To resolve this in Vercel:</b>
-                    <ol style="margin-top: 10px; color: #555; padding-left: 20px;">
-                        <li>Open your <b>Vercel Project Dashboard</b></li>
-                        <li>Navigate to <b>Settings &rarr; Environment Variables</b></li>
-                        <li>Add <code>ATLASDB_URL</code> with your MongoDB Atlas connection string</li>
-                        <li>Redeploy your project</li>
-                    </ol>
+            <!DOCTYPE html>
+            <html><head><title>StayHive - Setup Required</title></head>
+            <body style="font-family: Arial, sans-serif; background: #f5f5f5; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0;">
+                <div style="max-width: 600px; padding: 40px; background: white; border-radius: 16px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); text-align: center;">
+                    <h1 style="color: #fe424d; font-size: 28px;">🏡 StayHive</h1>
+                    <h2 style="color: #333; font-size: 20px;">Database Connection Required</h2>
+                    <p style="color: #666; line-height: 1.6;">StayHive needs a MongoDB Atlas database to serve listings.</p>
+                    <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; text-align: left; margin: 20px 0;">
+                        <b>Setup Steps:</b>
+                        <ol style="color: #555; padding-left: 20px; margin-top: 10px;">
+                            <li>Create a free cluster at <a href="https://mongodb.com/cloud/atlas" target="_blank">MongoDB Atlas</a></li>
+                            <li>In Vercel: <b>Settings → Environment Variables</b></li>
+                            <li>Add <code style="background:#e9ecef;padding:2px 6px;border-radius:4px;">ATLASDB_URL</code> with your connection string</li>
+                            <li>Click <b>Redeploy</b></li>
+                        </ol>
+                    </div>
+                    <p style="color: #999; font-size: 13px;">Error: ${err.message}</p>
                 </div>
-                <small style="color: #888;">Error details: ${err.message}</small>
-            </div>
+            </body></html>
         `);
     }
 });
 
+// Session configuration
 const sessionOptions = {
     secret: process.env.SECRET || "mysupersecretcode",
     resave: false,
@@ -77,6 +96,7 @@ const sessionOptions = {
     }
 };
 
+// Use MongoDB session store only when we have a valid Atlas URL
 if (hasValidAtlasUrl) {
     const store = MongoStore.create({
         mongoUrl: dbUrl,
@@ -126,7 +146,7 @@ app.use((err, req, res, next) => {
 });
 
 const port = process.env.PORT || 8080;
-if (process.env.NODE_ENV !== "production" || !process.env.VERCEL) {
+if (!process.env.VERCEL) {
     app.listen(port, () => {
         console.log(`server is listening to port ${port}`);
     });

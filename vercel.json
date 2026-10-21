@@ -7,12 +7,27 @@
       "config": {
         "includeFiles": [
           "views/**",
-          "public/**"
+          "public/**",
+          "utils/**",
+          "models/**",
+          "controllers/**",
+          "routes/**",
+          "cloudConfig.js",
+          "middleware.js",
+          "schema.js"
         ]
       }
     }
   ],
   "routes": [
+    {
+      "src": "/css/(.*)",
+      "dest": "/public/css/$1"
+    },
+    {
+      "src": "/js/(.*)",
+      "dest": "/public/js/$1"
+    },
     {
       "src": "/(.*)",
       "dest": "app.js"
