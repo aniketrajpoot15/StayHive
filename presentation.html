@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StayHive — Project Presentation Slide Deck</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    :root {
+      --primary: #fe424d;
+      --primary-hover: #e0323c;
+      --primary-light: #fff0f1;
+      --dark-bg: #0f172a;
+      --dark-card: #1e293b;
+      --light-bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --text-white: #ffffff;
+      --accent-blue: #0284c7;
+      --accent-emerald: #10b981;
+      --border: #e2e8f0;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+      --shadow-md: 0 4px 20px rgba(0,0,0,0.06);
+      --shadow-lg: 0 10px 30px rgba(0,0,0,0.12);
+      --radius-lg: 16px;
+      --radius-md: 12px;
+      --radius-sm: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: #090d16;
+      color: var(--text-main);
+      overflow-x: hidden;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    /* Deck Viewport (16:9 Aspect Ratio) */
+    .deck-container {
+      width: 100%;
+      max-width: 1200px;
+      aspect-ratio: 16 / 9;
+      position: relative;
+      background: var(--light-bg);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg), 0 0 0 1px rgba(255,255,255,0.08);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .slide {
+      display: none;
+      width: 100%;
+      height: 100%;
+      padding: 48px 56px;
+      flex-direction: column;
+      justify-content: space-between;
+      animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .slide.active {
+      display: flex;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.99); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    /* Dark Slide Variant */
+    .slide.dark-slide {
+      background: var(--dark-bg);
+      color: var(--text-white);
+    }
+
+    /* Slide Header */
+    .slide-header {
+      margin-bottom: 24px;
+    }
+
+    .tag-category {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--primary);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .slide-title {
+      font-size: 1.85rem;
+      font-weight: 800;
+      color: var(--text-main);
+      line-height: 1.25;
+    }
+
+    .dark-slide .slide-title {
+      color: var(--text-white);
+    }
+
+    /* Content Layouts */
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      flex: 1;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      flex: 1;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+      gap: 16px;
+      flex: 1;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 22px;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .dark-slide .card {
+      background: var(--dark-card);
+      border-color: rgba(255,255,255,0.08);
+      color: var(--text-white);
+    }
+
+    .card-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-body ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .card-body li {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .dark-slide .card-body li {
+      color: #94a3b8;
+    }
+
+    .card-body li i {
+      color: var(--primary);
+      margin-top: 3px;
+      font-size: 0.8rem;
+      flex-shrink: 0;
+    }
+
+    /* Controls Bar */
+    .controls-bar {
+      margin-top: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      max-width: 1200px;
+      color: #94a3b8;
+      font-size: 0.9rem;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn {
+      background: #1e293b;
+      color: white;
+      border: 1px solid #334155;
+      padding: 8px 16px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 0.85rem;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+    }
+
+    .btn:hover {
+      background: #334155;
+      border-color: #475569;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-hover);
+    }
+
+    /* Speaker Notes Drawer */
+    .notes-panel {
+      width: 100%;
+      max-width: 1200px;
+      background: #1e293b;
+      border-radius: var(--radius-md);
+      margin-top: 12px;
+      padding: 16px 20px;
+      color: #e2e8f0;
+      font-size: 0.85rem;
+      line-height: 1.6;
+      border: 1px solid #334155;
+      display: none;
+    }
+
+    .notes-panel.visible {
+      display: block;
+    }
+
+    .notes-header {
+      font-weight: 700;
+      color: var(--primary);
+      text-transform: uppercase;
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Title Slide Specifics */
+    .title-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      height: 100%;
+    }
+
+    .brand-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(254, 66, 77, 0.15);
+      color: var(--primary);
+      padding: 6px 14px;
+      border-radius: 50px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      width: fit-content;
+      margin-bottom: 20px;
+    }
+
+    .title-h1 {
+      font-size: 3.2rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 12px;
+      color: var(--text-white);
+    }
+
+    .title-h2 {
+      font-size: 1.35rem;
+      font-weight: 500;
+      color: #94a3b8;
+      max-width: 800px;
+      line-height: 1.5;
+      margin-bottom: 32px;
+    }
+
+    .meta-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(255,255,255,0.04);
+      padding: 16px 24px;
+      border-radius: var(--radius-md);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .live-link {
+      color: var(--accent-blue);
+      text-decoration: none;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .live-link:hover {
+      text-decoration: underline;
+    }
+
+    /* Print styling */
+    @media print {
+      body {
+        background: white;
+        padding: 0;
+      }
+      .deck-container {
+        max-width: 100%;
+        box-shadow: none;
+        border-radius: 0;
+      }
+      .slide {
+        display: flex !important;
+        page-break-after: always;
+        height: 100vh;
+      }
+      .controls-bar, .notes-panel {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="deck-container" id="deck">
+
+    <!-- SLIDE 1: Title -->
+    <div class="slide dark-slide active" data-notes="Good morning everyone! Today I am presenting StayHive, a comprehensive full-stack vacation rental web platform inspired by Airbnb. It empowers property hosts to list unique stays and enables travelers to discover places worldwide with interactive maps and verified reviews. The project is currently deployed and live on Vercel.">
+      <div class="title-content">
+        <div class="brand-badge"><i class="fa-solid fa-compass"></i> FULL-STACK WEB DEVELOPMENT PROJECT</div>
+        <h1 class="title-h1">🏡 StayHive</h1>
+        <h2 class="title-h2">A Modern Vacation Rental & Accommodation Platform built with Node.js, Express, MongoDB Atlas, Mapbox & Cloudinary.</h2>
+        <div class="meta-footer">
+          <div>
+            <div style="font-size: 0.95rem; font-weight: 700; color: white;">Presenter: Aniket Rajpoot</div>
+            <div style="font-size: 0.8rem; color: #94a3b8; margin-top: 2px;">Tech Stack: Node.js • Express • MongoDB • Mapbox • Bootstrap</div>
+          </div>
+          <a class="live-link" href="https://stay-hive-three.vercel.app/listings" target="_blank">
+            <i class="fa-solid fa-arrow-up-right-from-square"></i> Live Demo: stay-hive-three.vercel.app
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 2: Problem & Solution -->
+    <div class="slide" data-notes="Existing vacation rental platforms are often walled gardens with steep commissions and rigid experiences. StayHive addresses these challenges by offering open listing creation, real-time geocoding, high-performance cloud photo streaming, and authenticated review rating systems.">
+      <div class="slide-header">
+        <div class="tag-category"><i class="fa-solid fa-lightbulb"></i> PROBLEM & SOLUTION</div>
+        <h2 class="slide-title">Executive Overview & Problem Statement</h2>
+      </div>
+      <div class="grid-3">
+        <div class="card" style="border-top: 4px solid var(--primary);">
+          <div class="card-title" style="color: var(--primary);"><i class="fa-solid fa-triangle-exclamation"></i> The Problem</div>
+          <div class="card-body">
+            <ul>
+              <li><i class="fa-solid fa-xmark" style="color: #ef4444;"></i> High barrier for property hosts to showcase stays.</li>
+              <li><i class="fa-solid fa-xmark" style="color: #ef4444;"></i> Missing visual location context & map coordinates.</li>
+              <li><i class="fa-solid fa-xmark" style="color: #ef4444;"></i> Slow page loads due to unoptimized local storage.</li>
+              <li><i class="fa-solid fa-xmark" style="color: #ef4444;"></i> Lack of verified, authenticated guest reviews.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card" style="border-top: 4px solid var(--accent-blue);">
+          <div class="card-title" style="color: var(--accent-blue);"><i class="fa-solid fa-wand-magic-sparkles"></i> The Solution</div>
+          <div class="card-body">
+            <ul>
+              <li><i class="fa-solid fa-check" style="color: #10b981;"></i> Intuitive listing creation with instant geocoding.</li>
+              <li><i class="fa-solid fa-check" style="color: #10b981;"></i> Interactive Mapbox GL JS map pins & popups.</li>
+              <li><i class="fa-solid fa-check" style="color: #10b981;"></i> Cloudinary media streaming on a global CDN.</li>
+              <li><i class="fa-solid fa-check" style="color: #10b981;"></i> Starability animated review rating verification.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card" style="border-top: 4px solid var(--accent-emerald);">
+          <div class="card-title" style="color: var(--accent-emerald);"><i class="fa-solid fa-users"></i> Target Audience</div>
+          <div class="card-body">
+            <ul>
+              <li><i class="fa-solid fa-user"></i> <b>Guests:</b> Browse, filter by category, explore map coordinates, view reviews.</li>
+              <li><i class="fa-solid fa-house-chimney-user"></i> <b>Hosts:</b> Publish properties, edit rates, upload gallery photos.</li>
+              <li><i class="fa-solid fa-shield-halved"></i> <b>Admins:</b> Oversee content integrity and schema validations.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 3: System Architecture -->
+    <div class="slide" data-notes="StayHive is built strictly on the Model-View-Controller architecture. This decouples presentation, business routing, and database storage, making the codebase scalable, maintainable, and easy to extend.">
+      <div class="slide-header">
+        <div class="tag-category"><i class="fa-solid fa-sitemap"></i> SYSTEM ARCHITECTURE</div>
+        <h2 class="slide-title">Model-View-Controller (MVC) Framework</h2>
+      </div>
+      <div class="grid-3">
+        <div class="card" style="border-top: 4px solid #f59e0b;">
+          <div class="card-title"><i class="fa-solid fa-paintbrush" style="color: #f59e0b;"></i> View (Presentation)</div>
+          <div class="card-body">
+            <ul>
+              <li><i class="fa-solid fa-circle-check"></i> EJS & EJS-Mate layout inheritance.</li>
+              <li><i class="fa-solid fa-circle-check"></i> Modular partials (Navbar, Footer, Flash alerts).</li>
+              <li><i class="fa-solid fa-circle-check"></i> Bootstrap 5.3 + Custom CSS for responsive UI.</li>
+              <li><i class="fa-solid fa-circle-check"></i> Mapbox GL JS client-side rendering.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card" style="border-top: 4px solid var(--primary);">
+          <div class="card-title"><i class="fa-solid fa-gears" style="color: var(--primary);"></i> Controller (Logic)</div>
+          <div class="card-body">
+            <ul>
+              <li><i class="fa-solid fa-circle-check"></i> Express.js RESTful route definitions.</li>
+              <li><i class="fa-solid fa-circle-check"></i> Authorization middleware (isOwner, isLoggedIn).</li>
+              <li><i class="fa-solid fa-circle-check"></i> Mapbox SDK forward geocoding integration.</li>
+              <li><i class="fa-solid fa-circle-check"></i> Multer-Cloudinary image streaming pipeline.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card" style="border-top: 4px solid var(--accent-blue);">
+          <div class="card-title"><i class="fa-solid fa-database" style="color: var(--accent-blue);"></i> Model (Persistence)</div>
+          <div class="card-body">
+            <ul>
+              <li><i class="fa-solid fa-circle-check"></i> MongoDB Atlas cloud replica set.</li>
+              <li><i class="fa-solid fa-circle-check"></i> Mongoose schemas with ObjectId references.</li>
+              <li><i class="fa-solid fa-circle-check"></i> Embedded GeoJSON point geometry coordinates.</li>
+              <li><i class="fa-solid fa-circle-check"></i> Cascade deletion hooks for reviews.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 4: Tech Stack -->
+    <div class="slide" data-notes="We selected modern, production-grade tools. On the backend, Node.js and Express handle HTTP transactions, MongoDB Atlas stores unstructured property documents, Cloudinary handles media transformations, and Vercel powers serverless deployment.">
+      <div class="slide-header">
+        <div class="tag-category"><i class="fa-solid fa-layer-group"></i> TECH STACK</div>
+        <h2 class="slide-title">Technology Stack & Cloud Ecosystem</h2>
+      </div>
+      <div class="grid-4">
+        <div class="card">
+          <div class="card-title" style="color: var(--primary);"><i class="fa-brands fa-node-js"></i> Backend & Runtime</div>
+          <div class="card-body">
+            <ul>
+              <li><i class="fa-solid fa-caret-right"></i> <b>Node.js (v20+):</b> High-performance asynchronous runtime.</li>
+              <li><i class="fa-solid fa-caret-right"></i> <b>Express.js (v5):</b> REST API routing & middleware architecture.</li>
+              <li><i class="fa-solid fa-caret-right"></i> <b>Passport.js:</b> Authentication with PBKDF2 salt hashing.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title" style="color: var(--accent-blue);"><i class="fa-solid fa-leaf"></i> Database & Sessions</div>
+          <div class="card-body">
+            <ul>
+              <li><i class="fa-solid fa-caret-right"></i> <b>MongoDB Atlas:</b> Cloud NoSQL database cluster (AWS Mumbai).</li>
+              <li><i class="fa-solid fa-caret-right"></i> <b>Mongoose ODM:</b> Schema validation, casting & hooks.</li>
+              <li><i class="fa-solid fa-caret-right"></i> <b>Connect-Mongo:</b> Serverless session persistence in DB.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title" style="color: var(--accent-emerald);"><i class="fa-solid fa-cloud"></i> Cloud Media & Maps</div>
+          <div class="card-body">
+            <ul>
+              <li><i class="fa-solid fa-caret-right"></i> <b>Cloudinary SDK:</b> Auto-optimizing media CDN & multi-part uploads.</li>
+              <li><i class="fa-solid fa-caret-right"></i> <b>Mapbox GL JS:</b> Vector maps with custom pin popups.</li>
+              <li><i class="fa-solid fa-caret-right"></i> <b>Mapbox Geocoding:</b> Automated address-to-coordinate lookup.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title" style="color: #8b5cf6;"><i class="fa-brands fa-bootstrap"></i> Frontend & DevOps</div>
+          <div class="card-body">
+            <ul>
+              <li><i class="fa-solid fa-caret-right"></i> <b>Bootstrap 5.3 + CSS3:</b> Responsive layout & modern typography.</li>
+              <li><i class="fa-solid fa-caret-right"></i> <b>Joi Validation:</b> Strict server-side payload validation.</li>
+              <li><i class="fa-solid fa-caret-right"></i> <b>Vercel Serverless:</b> Global AWS Lambda edge deployment.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 5: Core Features -->
+    <div class="slide" data-notes="StayHive offers full CRUD operations on properties, automated geocoding where entering an address plots it directly on a dynamic map, an Airbnb-style category bar with trending filters, and an interactive 18% tax calculation toggle.">
+      <div class="slide-header">
+        <div class="tag-category"><i class="fa-solid fa-cubes"></i> CORE FEATURES</div>
+        <h2 class="slide-title">Core Modules & Interactive Capabilities</h2>
+      </div>
+      <div class="grid-3">
+        <div class="card">
+          <div class="card-title"><i class="fa-solid fa-house" style="color: var(--primary);"></i> Listings Management</div>
+          <div class="card-body">
+            <ul>
+              <li><i class="fa-solid fa-check"></i> Complete CRUD (Create, Read, Update, Delete).</li>
+              <li><i class="fa-solid fa-check"></i> Multi-part image uploading with live previews.</li>
+              <li><i class="fa-solid fa-check"></i> Dynamic pricing formatting (INR currency format).</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title"><i class="fa-solid fa-map-location-dot" style="color: var(--accent-blue);"></i> Mapbox Geocoding</div>
+          <div class="card-body">
+            <ul>
+              <li><i class="fa-solid fa-check"></i> Forward geocodes input address into [Lng, Lat].</li>
+              <li><i class="fa-solid fa-check"></i> GeoJSON Point geometry stored in MongoDB.</li>
+              <li><i class="fa-solid fa-check"></i> Interactive pin popup with exact stay location.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title"><i class="fa-solid fa-star" style="color: #f59e0b;"></i> Reviews & Tax Toggle</div>
+          <div class="card-body">
+            <ul>
+              <li><i class="fa-solid fa-check"></i> Interactive 1-5 star rating review system.</li>
+              <li><i class="fa-solid fa-check"></i> Category filter bar (Pools, Camping, Iconic Cities).</li>
+              <li><i class="fa-solid fa-check"></i> Real-time GST (+18%) display price switch.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 6: Security & Auth -->
+    <div class="slide" data-notes="Security was built as a priority rather than an afterthought. We implement multi-layered authorization ensuring users can only edit or delete their own properties and reviews, combined with cryptographic password hashing via PBKDF2.">
+      <div class="slide-header">
+        <div class="tag-category"><i class="fa-solid fa-shield-halved"></i> SECURITY & AUTH</div>
+        <h2 class="slide-title">Multi-Layered Security & Authorization</h2>
+      </div>
+      <div class="grid-4">
+        <div class="card">
+          <div class="card-title" style="color: var(--primary);"><i class="fa-solid fa-lock"></i> Password Hashing</div>
+          <div class="card-body">
+            <ul>
+              <li><i class="fa-solid fa-check"></i> PBKDF2 cryptographic hashing algorithm.</li>
+              <li><i class="fa-solid fa-check"></i> Unique randomized 32-byte salt per user.</li>
+              <li><i class="fa-solid fa-check"></i> Passwords never stored in readable plaintext.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title" style="color: var(--accent-blue);"><i class="fa-solid fa-user-shield"></i> Role-Based Permissions</div>
+          <div class="card-body">
+            <ul>
+              <li><i class="fa-solid fa-check"></i> <b>isLoggedIn:</b> Guards creation & review routes.</li>
+              <li><i class="fa-solid fa-check"></i> <b>isOwner:</b> Blocks unauthorized property updates.</li>
+              <li><i class="fa-solid fa-check"></i> <b>isReviewAuthor:</b> Only review creator can delete.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title" style="color: var(--accent-emerald);"><i class="fa-solid fa-filter-circle-check"></i> Schema Validation (Joi)</div>
+          <div class="card-body">
+            <ul>
+              <li><i class="fa-solid fa-check"></i> Strict server-side schema verification.</li>
+              <li><i class="fa-solid fa-check"></i> Protects against payload tampering & injection.</li>
+              <li><i class="fa-solid fa-check"></i> Client-side Bootstrap feedback validation.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title" style="color: #8b5cf6;"><i class="fa-solid fa-cookie-bite"></i> Session Protection</div>
+          <div class="card-body">
+            <ul>
+              <li><i class="fa-solid fa-check"></i> HTTP-Only cookies prevent XSS theft.</li>
+              <li><i class="fa-solid fa-check"></i> Sessions persisted safely in MongoDB Atlas.</li>
+              <li><i class="fa-solid fa-check"></i> Cascade deletion cleans orphaned review data.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 7: Database Schemas -->
+    <div class="slide" data-notes="Here is the data structure. Listings contain GeoJSON geometry coordinates, pricing, and references to owners and reviews. When a listing is deleted, a Mongoose post-delete hook automatically triggers cascade removal of all associated reviews.">
+      <div class="slide-header">
+        <div class="tag-category"><i class="fa-solid fa-database"></i> DATA MODELING</div>
+        <h2 class="slide-title">MongoDB Schema & Relational Modeling</h2>
+      </div>
+      <div class="grid-3">
+        <div class="card">
+          <div class="card-title" style="color: var(--primary);"><i class="fa-solid fa-building"></i> Listing Schema</div>
+          <div class="card-body">
+            <ul>
+              <li><i class="fa-solid fa-cube"></i> <b>title, description:</b> String</li>
+              <li><i class="fa-solid fa-cube"></i> <b>image:</b> { url: String, filename: String }</li>
+              <li><i class="fa-solid fa-cube"></i> <b>price, location, country:</b> String/Number</li>
+              <li><i class="fa-solid fa-cube"></i> <b>geometry:</b> GeoJSON Point [Lng, Lat]</li>
+              <li><i class="fa-solid fa-cube"></i> <b>owner:</b> Ref -> User</li>
+              <li><i class="fa-solid fa-cube"></i> <b>reviews:</b> [ Ref -> Review ]</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title" style="color: var(--accent-blue);"><i class="fa-solid fa-user"></i> User Schema</div>
+          <div class="card-body">
+            <ul>
+              <li><i class="fa-solid fa-cube"></i> <b>email:</b> String (Unique, Required)</li>
+              <li><i class="fa-solid fa-cube"></i> <b>username:</b> Managed by Passport</li>
+              <li><i class="fa-solid fa-cube"></i> <b>hash:</b> Binary PBKDF2 hash</li>
+              <li><i class="fa-solid fa-cube"></i> <b>salt:</b> Unique cryptographic salt</li>
+              <li><i class="fa-solid fa-cube"></i> <b>createdAt:</b> Timestamp</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title" style="color: #f59e0b;"><i class="fa-solid fa-message"></i> Review Schema</div>
+          <div class="card-body">
+            <ul>
+              <li><i class="fa-solid fa-cube"></i> <b>comment:</b> String (Required)</li>
+              <li><i class="fa-solid fa-cube"></i> <b>rating:</b> Number (1 to 5 Stars)</li>
+              <li><i class="fa-solid fa-cube"></i> <b>author:</b> Ref -> User</li>
+              <li><i class="fa-solid fa-cube"></i> <b>createdAt:</b> Date (Default now)</li>
+              <li><i class="fa-solid fa-recycle" style="color: #10b981;"></i> <b>Cascade Hook:</b> Auto-deletes on listing remove</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 8: Deployment & DevOps -->
+    <div class="slide" data-notes="Deploying to Vercel required adapting our Express server to run inside AWS Lambda serverless functions. We solved filesystem isolation by bundling all views and public assets through vercel.json, and established secure database connection caching.">
+      <div class="slide-header">
+        <div class="tag-category"><i class="fa-solid fa-rocket"></i> DEVOPS & HOSTING</div>
+        <h2 class="slide-title">Serverless Architecture & Cloud Deployment</h2>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title" style="color: var(--primary);"><i class="fa-solid fa-server"></i> Vercel Serverless Integration</div>
+          <div class="card-body">
+            <ul>
+              <li><i class="fa-solid fa-check"></i> Express monolith wrapped in `@vercel/node` AWS Lambda.</li>
+              <li><i class="fa-solid fa-check"></i> `vercel.json` configured with comprehensive `includeFiles`.</li>
+              <li><i class="fa-solid fa-check"></i> Static files routed seamlessly through `express.static`.</li>
+              <li><i class="fa-solid fa-check"></i> Automated CI/CD triggers build upon every GitHub push.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title" style="color: var(--accent-blue);"><i class="fa-solid fa-cloud"></i> Cloud Cluster & Environment</div>
+          <div class="card-body">
+            <ul>
+              <li><i class="fa-solid fa-check"></i> <b>MongoDB Atlas:</b> Managed M0 replica set (AWS Mumbai).</li>
+              <li><i class="fa-solid fa-check"></i> <b>Connection Caching:</b> Reuses Mongoose connection across Lambda invocations.</li>
+              <li><i class="fa-solid fa-check"></i> <b>Zero Plaintext Leaks:</b> Environment keys isolated in Vercel settings.</li>
+              <li><i class="fa-solid fa-check"></i> <b>High Availability:</b> Global CDN asset delivery with 99.9% uptime.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 9: Challenges & Solutions -->
+    <div class="slide" data-notes="We encountered several notable engineering challenges, including serverless static asset 404s, database connection pooling during cold starts, and geocoding synchronization. Each was resolved with industry best practices.">
+      <div class="slide-header">
+        <div class="tag-category"><i class="fa-solid fa-wrench"></i> ENGINEERING HIGHLIGHTS</div>
+        <h2 class="slide-title">Technical Challenges & Implemented Solutions</h2>
+      </div>
+      <div class="grid-2">
+        <div class="card" style="border-left: 4px solid var(--primary);">
+          <div class="card-title">1. Serverless Asset Bundling & Routing</div>
+          <div class="card-body">
+            <ul>
+              <li><i class="fa-solid fa-circle-exclamation" style="color: #ef4444;"></i> <b>Challenge:</b> Serverless functions lacked local path visibility, causing 404s on stylesheets.</li>
+              <li><i class="fa-solid fa-circle-check" style="color: #10b981;"></i> <b>Solution:</b> Routed all asset traffic into Express `__dirname` and bundled EJS views via `includeFiles`.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card" style="border-left: 4px solid var(--accent-blue);">
+          <div class="card-title">2. Serverless Database Pooling</div>
+          <div class="card-body">
+            <ul>
+              <li><i class="fa-solid fa-circle-exclamation" style="color: #ef4444;"></i> <b>Challenge:</b> Independent Lambda instances risked exhausting MongoDB Atlas connections.</li>
+              <li><i class="fa-solid fa-circle-check" style="color: #10b981;"></i> <b>Solution:</b> Cached `readyState` check prevents duplicate calls to `mongoose.connect()`.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card" style="border-left: 4px solid #f59e0b;">
+          <div class="card-title">3. Geocoding Fallbacks & Coordinate Sync</div>
+          <div class="card-body">
+            <ul>
+              <li><i class="fa-solid fa-circle-exclamation" style="color: #ef4444;"></i> <b>Challenge:</b> Vague addresses caused missing coordinates, leading to map rendering crashes.</li>
+              <li><i class="fa-solid fa-circle-check" style="color: #10b981;"></i> <b>Solution:</b> Added defensive checks on Mapbox feature arrays and fallback coordinates.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card" style="border-left: 4px solid #8b5cf6;">
+          <div class="card-title">4. Document Cascade Deletion</div>
+          <div class="card-body">
+            <ul>
+              <li><i class="fa-solid fa-circle-exclamation" style="color: #ef4444;"></i> <b>Challenge:</b> Deleting a listing left orphaned reviews occupying database storage.</li>
+              <li><i class="fa-solid fa-circle-check" style="color: #10b981;"></i> <b>Solution:</b> Implemented Mongoose `post('findOneAndDelete')` hook to automatically remove linked reviews.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 10: Future Scope & Conclusion -->
+    <div class="slide dark-slide" data-notes="In conclusion, StayHive demonstrates complete mastery of the full-stack web development lifecycle—from schema design to production serverless deployment. Future updates will incorporate Stripe payments and WebSocket messaging. Thank you for your time, and I am now excited to demonstrate the live website!">
+      <div class="slide-header">
+        <div class="tag-category"><i class="fa-solid fa-flag-checkered"></i> CONCLUSION & ROADMAP</div>
+        <h2 class="slide-title">Future Scope, Live Demo & Q&A</h2>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title" style="color: var(--accent-blue);"><i class="fa-solid fa-road"></i> Future Enhancements</div>
+          <div class="card-body">
+            <ul>
+              <li><i class="fa-solid fa-credit-card"></i> <b>Payment Gateway:</b> Stripe / Razorpay checkout integration.</li>
+              <li><i class="fa-solid fa-calendar-days"></i> <b>Booking Calendar:</b> Date-picker reservation system.</li>
+              <li><i class="fa-solid fa-comments"></i> <b>Real-Time Chat:</b> WebSockets messaging between guests & hosts.</li>
+              <li><i class="fa-solid fa-magnifying-glass"></i> <b>Elasticsearch:</b> Full-text fuzzy search by price and amenities.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card" style="border: 2px solid var(--primary);">
+          <div class="card-title" style="color: var(--primary);"><i class="fa-solid fa-trophy"></i> Project Summary & Live Demo</div>
+          <div class="card-body">
+            <ul>
+              <li><i class="fa-solid fa-check"></i> Production-ready full-stack application.</li>
+              <li><i class="fa-solid fa-check"></i> End-to-end security, validation & cloud media delivery.</li>
+              <li><i class="fa-solid fa-check"></i> Accessible worldwide on desktop and mobile.</li>
+            </ul>
+            <div style="margin-top: 20px; padding: 14px; background: rgba(254,66,77,0.12); border-radius: 8px;">
+              <div style="font-size: 0.8rem; font-weight: 700; color: var(--primary);">LIVE DEPLOYED APPLICATION:</div>
+              <a href="https://stay-hive-three.vercel.app/listings" target="_blank" style="color: white; font-weight: 700; text-decoration: none; font-size: 1rem; display: block; margin-top: 4px;">
+                👉 https://stay-hive-three.vercel.app/listings
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Deck Navigation Controls -->
+  <div class="controls-bar">
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <span id="slideCounter" style="font-weight: 700; color: white;">Slide 1 / 10</span>
+      <button class="btn" id="toggleNotesBtn"><i class="fa-regular fa-clipboard"></i> Speaker Notes (N)</button>
+    </div>
+    <div class="btn-group">
+      <button class="btn" id="prevBtn"><i class="fa-solid fa-chevron-left"></i> Previous (←)</button>
+      <button class="btn btn-primary" id="nextBtn">Next (→) <i class="fa-solid fa-chevron-right"></i></button>
+      <button class="btn" onclick="window.print()"><i class="fa-solid fa-print"></i> Print / PDF</button>
+    </div>
+  </div>
+
+  <!-- Speaker Notes Box -->
+  <div class="notes-panel" id="notesPanel">
+    <div class="notes-header"><i class="fa-solid fa-comment-dots"></i> Speaker Notes for this slide:</div>
+    <div id="notesText"></div>
+  </div>
+
+  <script>
+    const slides = document.querySelectorAll('.slide');
+    const counter = document.getElementById('slideCounter');
+    const notesPanel = document.getElementById('notesPanel');
+    const notesText = document.getElementById('notesText');
+    const toggleNotesBtn = document.getElementById('toggleNotesBtn');
+    let currentSlide = 0;
+
+    function showSlide(index) {
+      if (index < 0) index = 0;
+      if (index >= slides.length) index = slides.length - 1;
+      currentSlide = index;
+
+      slides.forEach((s, idx) => {
+        s.classList.toggle('active', idx === currentSlide);
+      });
+
+      counter.textContent = `Slide ${currentSlide + 1} / ${slides.length}`;
+      const notes = slides[currentSlide].getAttribute('data-notes') || 'No notes for this slide.';
+      notesText.textContent = notes;
+    }
+
+    document.getElementById('prevBtn').addEventListener('click', () => showSlide(currentSlide - 1));
+    document.getElementById('nextBtn').addEventListener('click', () => showSlide(currentSlide + 1));
+
+    toggleNotesBtn.addEventListener('click', () => {
+      notesPanel.classList.toggle('visible');
+    });
+
+    // Keyboard Navigation
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === 'Space') {
+        showSlide(currentSlide + 1);
+      } else if (e.key === 'ArrowLeft') {
+        showSlide(currentSlide - 1);
+      } else if (e.key.toLowerCase() === 'n') {
+        notesPanel.classList.toggle('visible');
+      }
+    });
+
+    // Initialize
+    showSlide(0);
+  </script>
+</body>
+</html>

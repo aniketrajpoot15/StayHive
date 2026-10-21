@@ -7,11 +7,21 @@
   <img src="https://img.shields.io/badge/Bootstrap-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white" alt="Bootstrap" />
   <img src="https://img.shields.io/badge/Mapbox-000000?style=for-the-badge&logo=mapbox&logoColor=white" alt="Mapbox" />
   <img src="https://img.shields.io/badge/Cloudinary-3448C5?style=for-the-badge&logo=cloudinary&logoColor=white" alt="Cloudinary" />
+  <img src="https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white" alt="Vercel" />
+</p>
+
+<p align="center">
+  🌐 <b>Live Deployment:</b> <a href="https://stay-hive-three.vercel.app/listings" target="_blank"><b>https://stay-hive-three.vercel.app/listings</b></a>
 </p>
 
 > **StayHive** is a full-stack vacation rental web application inspired by Airbnb. It allows users to explore, create, and manage unique properties worldwide, featuring interactive map geocoding, cloud media storage, user authentication, review ratings, and dynamic category filters.
 
 ---
+
+## 🌐 Live Demo
+
+Experience the live application hosted on Vercel:
+👉 **[https://stay-hive-three.vercel.app/listings](https://stay-hive-three.vercel.app/listings)**
 
 ## 🌟 Key Features
 
